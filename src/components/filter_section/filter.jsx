@@ -27,18 +27,20 @@ export const Filter = () => {
         </EuiFilterButton>
         <EuiFilterButton style={{ padding: "0 30px" }}>Latest</EuiFilterButton>
       </EuiFilterGroup>
+      <Flex>
+        <Select
+          placeholder="Manafracture"
+          size="md"
+          data={["HIKVision", "Adobe", "Canon", "Axxon"]}
+          m={"0 30px"}
+        />
 
-      <Select
-        placeholder="Manafracture"
-        size="md"
-        data={["HIKVision", "Adobe", "Canon", "Axxon"]}
-      />
-
-      <Select
-        placeholder="System"
-        size="md"
-        data={["HIKVision", "Adobe", "Canon", "Axxon"]}
-      />
+        <Select
+          placeholder="System"
+          size="md"
+          data={["HIKVision", "Adobe", "Canon", "Axxon"]}
+        />
+      </Flex>
     </Flex>
   );
 };

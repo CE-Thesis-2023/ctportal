@@ -5,6 +5,8 @@ import {
   EuiImage,
   EuiText,
 } from "@elastic/eui";
+import { ActionIcon, Flex } from "@mantine/core";
+import { IconTrash } from "@tabler/icons-react";
 import PropTypes from "prop-types";
 
 function StreamCard({ data }) {
@@ -24,6 +26,12 @@ function StreamCard({ data }) {
     }
   }
 
+  const deleteHandler = (e) => {
+    e.preventDefault();
+
+    console.log(e.target);
+  };
+
   return (
     <EuiCard
       display="transparent"
@@ -33,12 +41,21 @@ function StreamCard({ data }) {
         <EuiImage src="https://via.placeholder.com/1920x1080/eee?text=16:9"></EuiImage>
       }
       title={
-        <div className="items-center inline-flex">
-          <EuiText size="m" className="pr-2">
-            <strong>{data.name}</strong>
-          </EuiText>
-          <EuiBadge color="#FBFBFB">HIKVision</EuiBadge>
-        </div>
+        <Flex justify="space-between" align="center">
+          <div className="items-center inline-flex">
+            <EuiText size="m" className="pr-2">
+              <strong>{data.name}</strong>
+            </EuiText>
+            <EuiBadge color="#FBFBFB">HIKVision</EuiBadge>
+          </div>
+          <ActionIcon
+            bg={"white"}
+            onClick={deleteHandler}
+            value={data.cameraId}
+          >
+            <IconTrash color="red" />
+          </ActionIcon>
+        </Flex>
       }
       titleSize="xs"
       titleElement="p"

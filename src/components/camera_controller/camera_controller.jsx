@@ -5,10 +5,19 @@ import {
   EuiHeaderLinks,
 } from "@elastic/eui";
 import { Button, Flex, Switch, Center } from "@mantine/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-export const CameraController = (streamingId) => {
+export const CameraController = ({ streamingId }) => {
   const [streamState, setStreamState] = useState(false);
+
+  console.log(streamingId);
+
+  useEffect(() => {
+    fetch(`http://103.165.142.44:7880/cameras/${streamingId}/streams`)
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }, []);
 
   const switchHanlder = () => {
     setStreamState(!streamState);
@@ -115,6 +124,10 @@ export const CameraController = (streamingId) => {
       </EuiSplitPanel.Inner>
     </>
   );
+};
+
+CameraController.propTypes = {
+  streamingId: PropTypes.string.isRequired,
 };
 
 export default CameraController;

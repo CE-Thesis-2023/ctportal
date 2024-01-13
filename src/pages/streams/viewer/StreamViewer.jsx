@@ -13,7 +13,6 @@ import {
 } from "@elastic/eui";
 import { useTitle } from "ahooks";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 
 import Header from "../../../components/header/Header";
 import CameraController from "../../../components/camera_controller/camera_controller";
@@ -22,10 +21,6 @@ function StreamViewer() {
   useTitle("ALSS - Stream", {
     restoreOnUnmount: true,
   });
-  const params = useParams();
-
-  console.log(params);
-
   const breadcrumbs = [
     {
       text: "Videos",
@@ -108,7 +103,7 @@ function StreamViewer() {
     <>
       <Header
         breadcrumps={breadcrumbs}
-        title="Living Room"
+        title="Live Footage"
         rightSideItems={[]}
       ></Header>
       <EuiSpacer size="m" />
@@ -120,7 +115,7 @@ function StreamViewer() {
               width={"100%"}
               height={500}
               allowFullScreen
-            ></iframe>
+            />
             <EuiSpacer size="l" />
             <EuiTabs>{renderTabs()}</EuiTabs>
             <EuiSpacer size="l" />
