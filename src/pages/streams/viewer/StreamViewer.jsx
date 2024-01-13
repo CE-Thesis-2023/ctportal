@@ -12,30 +12,28 @@ import {
   EuiTab,
   EuiTabs,
   EuiText,
-} from '@elastic/eui';
-import { useTitle } from 'ahooks';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Header from '../../../components/header/Header';
+} from "@elastic/eui";
+import { useTitle } from "ahooks";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import Header from "../../../components/header/Header";
 
 function StreamViewer() {
-  useTitle('ALSS - Stream', {
+  useTitle("ALSS - Stream", {
     restoreOnUnmount: true,
   });
   const params = useParams();
 
-  useEffect(() => {
-    
-  })
+  console.log(params);
 
   const breadcrumbs = [
     {
-      text: 'Streams',
-      href: '',
+      text: "Videos",
+      href: "",
     },
     {
-      text: 'Discover',
-      href: '/streams/discover',
+      text: "Streams",
+      href: "/streams",
     },
   ];
 
@@ -43,7 +41,7 @@ function StreamViewer() {
 
   const tabs = [
     {
-      name: 'Description',
+      name: "Description",
       content: (
         <section>
           <EuiDescriptionList>
@@ -52,8 +50,8 @@ function StreamViewer() {
               Video stream of the living room
             </EuiDescriptionListDescription>
           </EuiDescriptionList>
-          <EuiSpacer size='m' />
-          <EuiFlexGroup direction='row'>
+          <EuiSpacer size="m" />
+          <EuiFlexGroup direction="row">
             <EuiFlexItem grow>
               <EuiDescriptionList>
                 <EuiDescriptionListTitle>Protocol</EuiDescriptionListTitle>
@@ -83,7 +81,7 @@ function StreamViewer() {
       ),
     },
     {
-      name: 'Statistics',
+      name: "Statistics",
       content: <div></div>,
     },
   ];
@@ -108,17 +106,20 @@ function StreamViewer() {
     <>
       <Header
         breadcrumps={breadcrumbs}
-        title='Living Room'
+        title="Living Room"
         rightSideItems={[]}
       ></Header>
-      <EuiSpacer size='m' />
+      <EuiSpacer size="m" />
       <section>
-        <EuiFlexGroup direction='row'>
+        <EuiFlexGroup direction="row">
           <EuiFlexItem grow={6}>
-            <EuiImage src='https://via.placeholder.com/1920x1080/eee?text=16:9' />
-            <EuiSpacer size='l' />
+            <EuiImage
+              src="https://via.placeholder.com/1920x1080/eee?text=16:9"
+              alt=""
+            />
+            <EuiSpacer size="l" />
             <EuiTabs>{renderTabs()}</EuiTabs>
-            <EuiSpacer size='l' />
+            <EuiSpacer size="l" />
             {tabs[selectedTabId].content}
           </EuiFlexItem>
           <EuiFlexItem grow={4}>
@@ -126,16 +127,16 @@ function StreamViewer() {
               grow={false}
               hasShadow={false}
               hasBorder
-              borderRadius='s'
-              style={{ height: '40rem' }}
+              borderRadius="s"
+              style={{ height: "40rem" }}
             >
-              <EuiSplitPanel.Inner grow className=''>
-                <EuiSkeletonText lines={3} size='m' isLoading />
+              <EuiSplitPanel.Inner grow className="">
+                <EuiSkeletonText lines={3} size="m" isLoading />
               </EuiSplitPanel.Inner>
-              <EuiSplitPanel.Inner grow={false} color='subdued'>
-                <div className='flex items-center justify-between'>
-                  <EuiHealth color='success'>Connected</EuiHealth>
-                  <EuiText size='s' color='#808080'>
+              <EuiSplitPanel.Inner grow={false} color="subdued">
+                <div className="flex items-center justify-between">
+                  <EuiHealth color="success">Connected</EuiHealth>
+                  <EuiText size="s" color="#808080">
                     via <strong>WebSocket</strong>
                   </EuiText>
                 </div>

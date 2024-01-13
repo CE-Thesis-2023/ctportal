@@ -1,29 +1,30 @@
-import { EuiTab } from '@elastic/eui';
-import { useTitle } from 'ahooks';
-import { useState } from 'react';
-import Header from '../../components/header/Header';
+import { EuiTab } from "@elastic/eui";
+import { useTitle } from "ahooks";
+import { useState } from "react";
+import Header from "../../components/header/Header";
+import EventTable from "../../components/table/table";
 
 function EventDashboard() {
-  useTitle('ALSS - Events', {
+  useTitle("ALSS - Events", {
     restoreOnUnmount: true,
   });
 
   const breadcrumbs = [
     {
-      text: 'Detection',
-      href: '',
+      text: "Detection",
+      href: "",
     },
     {
-      text: 'Events',
-      href: '/detection/events',
+      text: "Events",
+      href: "/detection/events",
     },
   ];
 
   const [selectTabId, setSelectedTabId] = useState(1);
 
   const tabs = [
-    renderTab(1, () => {}, 'People'),
-    renderTab(2, () => {}, 'Objects'),
+    renderTab(1, () => {}, "People"),
+    renderTab(2, () => {}, "Objects"),
   ];
 
   function renderTab(id, onClick, title, data = {}) {
@@ -46,11 +47,11 @@ function EventDashboard() {
     <div>
       <Header
         breadcrumps={breadcrumbs}
-        title={'Events'}
-        description={'View and manage all events collected from camera streams'}
+        title={"Events"}
+        description={"View and manage all events collected from camera streams"}
         tabs={tabs}
       />
-      {selectTabId}
+      <EventTable />
     </div>
   );
 }

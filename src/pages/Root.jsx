@@ -1,99 +1,130 @@
 import {
-    EuiAvatar,
-    EuiHeader,
-    EuiHeaderLink,
-    EuiHeaderLogo,
-    EuiHeaderSectionItem,
-    EuiHeaderSectionItemButton,
-    EuiPageBody,
-    EuiPageSection,
-    EuiPageTemplate
-} from '@elastic/eui';
-import {Outlet} from 'react-router-dom';
-
-import {appendIconComponentCache} from '@elastic/eui/es/components/icon/icon';
-
-import {icon as EuiIconApmTrace} from '@elastic/eui/es/components/icon/assets/apm_trace';
-import {icon as EuiIconArrowDown} from '@elastic/eui/es/components/icon/assets/arrow_down';
-import {icon as EuiIconArrowLeft} from '@elastic/eui/es/components/icon/assets/arrow_left';
-import {icon as EuiIconControlsHorizontal} from '@elastic/eui/es/components/icon/assets/controls_horizontal';
-import {icon as EuiIconDocuments} from '@elastic/eui/es/components/icon/assets/documents';
-import {icon as EuiIconInputOutput} from '@elastic/eui/es/components/icon/assets/inputOutput';
-import {icon as EuiIconMenu} from '@elastic/eui/es/components/icon/assets/menu';
-import {icon as EuiIconSortRight} from '@elastic/eui/es/components/icon/assets/sortRight';
-import {icon as EuiIconTimeline} from '@elastic/eui/es/components/icon/assets/timeline';
-import {icon as EuiIconVideoPlayer} from '@elastic/eui/es/components/icon/assets/videoPlayer';
-import {icon as EuiIconVisarea} from '@elastic/eui/es/components/icon/assets/vis_area';
-
+  EuiAvatar,
+  EuiHeader,
+  EuiHeaderLink,
+  EuiHeaderLogo,
+  EuiHeaderSectionItem,
+  EuiHeaderSectionItemButton,
+  EuiPageBody,
+  EuiPageSection,
+  EuiPageTemplate,
+} from "@elastic/eui";
+import { Outlet } from "react-router-dom";
+import { useState } from "react";
 
 // MANTINE
-import {NavLink} from '@mantine/core';
+import { Box, NavLink } from "@mantine/core";
+import { IconFingerprint, IconChevronRight } from "@tabler/icons-react";
+const data = [
+  {
+    default: true,
+    icon: IconFingerprint,
+    label: "Videos",
+    rightSection: <IconChevronRight size="1rem" stroke={1.5} />,
+    children: [
+      {
+        href: "/streams",
+        label: "Streams",
+      },
+      {
+        href: "/recs",
+        label: "Recordings",
+      },
+      {
+        href: "/metrics",
+        label: "Metrics",
+      },
+    ],
+  },
+  {
+    icon: IconFingerprint,
+    label: "Analytics",
+    rightSection: <IconChevronRight size="1rem" stroke={1.5} />,
+    children: [
+      {
+        href: "/events",
+        label: "Events",
+      },
+      {
+        href: "/configs",
+        label: "Configure",
+      },
+    ],
+  },
+  {
+    icon: IconFingerprint,
+    label: "Storage",
+    rightSection: <IconChevronRight size="1rem" stroke={1.5} />,
+    children: [],
+  },
+  {
+    icon: IconFingerprint,
+    label: "Settings",
+    rightSection: <IconChevronRight size="1rem" stroke={1.5} />,
+    children: [],
+  },
+];
 
-appendIconComponentCache({
-    arrowDown: EuiIconArrowDown,
-    arrowLeft: EuiIconArrowLeft,
-    documents: EuiIconDocuments,
-    menu: EuiIconMenu,
-    visArea: EuiIconVisarea,
-    videoPlayer: EuiIconVideoPlayer,
-    timeline: EuiIconTimeline,
-    controlsHorizontal: EuiIconControlsHorizontal,
-    apmTrace: EuiIconApmTrace,
-    inputOutput: EuiIconInputOutput,
-    sortRight: EuiIconSortRight,
-});
+const RootLayout = () => {
+  const [active, setActive] = useState("");
 
-function RootLayout() {
-    return (
-        <>
-            <EuiHeader theme='dark' position='fixed'>
-                <EuiHeaderSectionItem>
-                    <EuiHeaderLogo iconType='/logo.png' iconTitle='ALSS'>
-                        ALSS
-                    </EuiHeaderLogo>
-                    <EuiHeaderLink href='https://github.com/CE-Thesis-2023'>
-                        Code
-                    </EuiHeaderLink>
-                </EuiHeaderSectionItem>
-                <EuiHeaderSectionItem>
-                    <EuiHeaderSectionItemButton>
-                        <EuiAvatar name='User' size='s' color='#95F8F7'></EuiAvatar>
-                    </EuiHeaderSectionItemButton>
-                </EuiHeaderSectionItem>
-            </EuiHeader>
-            <EuiPageTemplate panelled>
-                <EuiPageTemplate.Sidebar sticky>
-                    <NavLink label="Videos" childrenOffset={30}>
-                        <NavLink label="Streams" href="#required-for-focus"/>
-                        <NavLink label="Recordings" href="#required-for-focus"/>
-                        <NavLink label="Metrics" href="#required-for-focus"/>
-                    </NavLink>
-                    <NavLink childrenOffset={30} label="Analytics">
-                        <NavLink label="XXX" href="#required-for-focus"/>
-                        <NavLink label="YYY" href="#required-for-focus"/>
-                        <NavLink label="ZZZ" href="#required-for-focus"/>
-                    </NavLink>
-                    <NavLink childrenOffset={30} label="Storage">
-                        <NavLink label="XXX" href="#required-for-focus"/>
-                        <NavLink label="YYY" href="#required-for-focus"/>
-                        <NavLink label="ZZZ" href="#required-for-focus"/>
-                    </NavLink>
-                    <NavLink childrenOffset={30} label="Settings">
-                        <NavLink label="XXX" href="#required-for-focus"/>
-                        <NavLink label="YYY" href="#required-for-focus"/>
-                        <NavLink label="ZZZ" href="#required-for-focus"/>
-                    </NavLink>
-                </EuiPageTemplate.Sidebar>
-                <main>
-                    <EuiPageBody>
-                        <EuiPageSection>
-                            <Outlet/>
-                        </EuiPageSection>
-                    </EuiPageBody>
-                </main>
-            </EuiPageTemplate>
-        </>
-    );
-}
+  const pathName = window.location.pathname;
+  console.log(pathName);
+  const items = data.map((item) => (
+    <NavLink
+      href="#required-for-focus"
+      key={item.label}
+      active={item.label === active}
+      label={item.label}
+      description={item.description}
+      rightSection={item.rightSection}
+      icon={<item.icon size="1rem" stroke={1.5} />}
+      onClick={() => setActive(item.label)}
+      childrenOffset={30}
+      defaultOpened={item.default}
+    >
+      {item.children.map((i) => (
+        <NavLink
+          href={i.href}
+          key={i.label}
+          label={i.label}
+          variant="subtle"
+          active={i.href === pathName}
+        />
+      ))}
+    </NavLink>
+  ));
+  return (
+    <>
+      <EuiHeader theme="dark" position="fixed">
+        <EuiHeaderSectionItem>
+          <EuiHeaderLogo iconType="/logo.png" iconTitle="ALSS">
+            ALSS
+          </EuiHeaderLogo>
+          <EuiHeaderLink href="https://github.com/CE-Thesis-2023">
+            Code
+          </EuiHeaderLink>
+        </EuiHeaderSectionItem>
+        <EuiHeaderSectionItem>
+          <EuiHeaderSectionItemButton>
+            <EuiAvatar name="User" size="s" color="#95F8F7"></EuiAvatar>
+          </EuiHeaderSectionItemButton>
+        </EuiHeaderSectionItem>
+      </EuiHeader>
+      <EuiPageTemplate panelled>
+        <EuiPageTemplate.Sidebar style={{ padding: 0 }} sticky>
+          <Box w={"100%"}>{items}</Box>
+        </EuiPageTemplate.Sidebar>
+        <main>
+          <EuiPageBody>
+            <EuiPageSection>
+              <Outlet />
+            </EuiPageSection>
+          </EuiPageBody>
+        </main>
+      </EuiPageTemplate>
+    </>
+  );
+};
 
 export default RootLayout;
