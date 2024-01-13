@@ -14,9 +14,9 @@ import {
 import { useTitle } from "ahooks";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Flex, Switch } from "@mantine/core";
 
 import Header from "../../../components/header/Header";
+import CameraController from "../../../components/camera_controller/camera_controller";
 
 function StreamViewer() {
   useTitle("ALSS - Stream", {
@@ -37,8 +37,6 @@ function StreamViewer() {
     },
   ];
 
-  const [streamState, setStreamState] = useState(false);
-
   const [selectedTabId, setSelectedTabId] = useState(0);
 
   const tabs = [
@@ -49,7 +47,7 @@ function StreamViewer() {
           <EuiDescriptionList>
             <EuiDescriptionListTitle>Description</EuiDescriptionListTitle>
             <EuiDescriptionListDescription>
-              Video stream of the living room
+              HIKVision Streaming Video
             </EuiDescriptionListDescription>
           </EuiDescriptionList>
           <EuiSpacer size="m" />
@@ -62,7 +60,7 @@ function StreamViewer() {
                 </EuiDescriptionListDescription>
                 <EuiDescriptionListTitle>Manufacturer</EuiDescriptionListTitle>
                 <EuiDescriptionListDescription>
-                  HKVision
+                  HIKVision
                 </EuiDescriptionListDescription>
               </EuiDescriptionList>
             </EuiFlexItem>
@@ -103,92 +101,25 @@ function StreamViewer() {
       );
     });
   }
+
   const streamingId = window.location.pathname.split("/").pop();
 
-  const switchHanlder = () => {
-    setStreamState(!streamState);
-
-    fetch(
-      `http://103.165.142.44:7880/api/cameras/${streamingId}/streams?enable=${!streamState}`,
-      {
-        method: "PUT",
-      }
-    );
-  };
-
-  const tiltedUp = () => {
-    fetch("http://103.165.142.44:7880/api/rc", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cameraId: streamingId,
-        pan: 0,
-        tilt: 50,
-      }),
-    }).then(() => console.log("TILED"));
-  };
-  const tiltedRight = () => {
-    fetch("http://103.165.142.44:7880/api/rc", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cameraId: streamingId,
-        pan: 50,
-        tilt: 0,
-      }),
-    }).then(() => console.log("TILED"));
-  };
-  const tiltedLeft = () => {
-    fetch("http://103.165.142.44:7880/api/rc", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cameraId: streamingId,
-        pan: -50,
-        tilt: 0,
-      }),
-    }).then(() => console.log("TILED"));
-  };
-  const tiltedDown = () => {
-    fetch("http://103.165.142.44:7880/api/rc", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cameraId: streamingId,
-        pan: 0,
-        tilt: -50,
-      }),
-    }).then(() => console.log("TILED"));
-  };
   return (
     <>
-      <Flex justify="space-between" align="flex-end">
-        <Header
-          breadcrumps={breadcrumbs}
-          title="Living Room"
-          rightSideItems={[]}
-        ></Header>
-        <div>
-          <Switch
-            onClick={switchHanlder}
-            size="xl"
-            onLabel="OFF"
-            offLabel="Enable"
-          />
-        </div>
-      </Flex>
+      <Header
+        breadcrumps={breadcrumbs}
+        title="Living Room"
+        rightSideItems={[]}
+      ></Header>
       <EuiSpacer size="m" />
       <section>
         <EuiFlexGroup direction="row">
           <EuiFlexItem grow={6}>
-            {/* <EuiImage
-              src="https://via.placeholder.com/1920x1080/eee?text=16:9"
-              alt=""
-            /> */}
             <iframe
               src={`http://103.165.142.44:8889/${streamingId}`}
               width={"100%"}
               height={500}
+              allowFullScreen
             ></iframe>
             <EuiSpacer size="l" />
             <EuiTabs>{renderTabs()}</EuiTabs>
@@ -203,15 +134,8 @@ function StreamViewer() {
               borderRadius="s"
               style={{ height: "40rem" }}
             >
-              <EuiSplitPanel.Inner grow className="">
-                <Flex>
-                  <Button onClick={tiltedUp}>Up</Button>
-                  <Button onClick={tiltedDown}>Down</Button>
-                  <Button onClick={tiltedLeft}>Left</Button>
-                  <Button onClick={tiltedRight}>Right</Button>
-                </Flex>
-                {/* <EuiSkeletonText lines={3} size="m" isLoading /> */}
-              </EuiSplitPanel.Inner>
+              <CameraController streamingId={streamingId} />
+
               <EuiSplitPanel.Inner grow={false} color="subdued">
                 <div className="flex items-center justify-between">
                   <EuiHealth color="success">Connected</EuiHealth>

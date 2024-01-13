@@ -31,13 +31,13 @@ export const Filter = () => {
       <Select
         placeholder="Manafracture"
         size="md"
-        data={["HKVision", "Adobe", "Canon", "Axxon"]}
+        data={["HIKVision", "Adobe", "Canon", "Axxon"]}
       />
 
       <Select
         placeholder="System"
         size="md"
-        data={["HKVision", "Adobe", "Canon", "Axxon"]}
+        data={["HIKVision", "Adobe", "Canon", "Axxon"]}
       />
     </Flex>
   );

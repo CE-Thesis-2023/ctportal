@@ -3,7 +3,14 @@ import { useTitle } from "ahooks";
 import Header from "../../../components/header/Header";
 import StreamCard from "../../../components/stream_card/StreamCard";
 import Filter from "../../../components/filter_section/filter";
-import { Modal, Button, Flex, Pagination, TextInput } from "@mantine/core";
+import {
+  Modal,
+  Button,
+  Flex,
+  Pagination,
+  TextInput,
+  Select,
+} from "@mantine/core";
 
 import { useForm } from "@mantine/form";
 
@@ -35,9 +42,17 @@ function StreamDashboard() {
     fetch("http://103.165.142.44:7880/api/cameras")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setCameraData(data["cameras"]);
-      });
+      })
+      .catch(() => console.log("ERROR"));
+  }, []);
+
+  const [ltds, setLtds] = useState([]);
+  const [selectValue, setSelectValue] = useState("");
+  useEffect(() => {
+    fetch("http://103.165.142.44:7880/api/devices")
+      .then((res) => res.json())
+      .then((data) => setLtds(data.transcoders.map((obj) => obj.deviceId)));
   }, []);
 
   const form = useForm({
@@ -50,6 +65,7 @@ function StreamDashboard() {
       transcoderId: "",
     },
   });
+
   const createNewStream = () => {
     fetch("http://103.165.142.44:7880/api/cameras", {
       method: "POST",
@@ -60,16 +76,11 @@ function StreamDashboard() {
         port: form.getInputProps("port").value,
         username: form.getInputProps("username").value,
         password: form.getInputProps("password").value,
-        transcoderId: form.getInputProps("transcoderId").value,
+        transcoderId: selectValue,
       }),
     }).then(() => alert("You Have Created A New Stream"));
-    // window.location.reload();
   };
 
-  // const baseUrl = "http://localhost:5173/streams";
-  // const queryString = encodeURIComponent(JSON.stringify(streamData));
-
-  // console.log(queryString)
   return (
     <div>
       <Flex align={"center"} justify={"space-between"}>
@@ -125,11 +136,20 @@ function StreamDashboard() {
           placeholder="Password"
           {...form.getInputProps("password")}
         />
-        <TextInput
+
+        <Select
+          label="Transcoder Id"
+          placeholder="Transcoder Id"
+          data={ltds}
+          value={selectValue}
+          onChange={setSelectValue}
+        />
+
+        {/* <TextInput
           label="Transcoder Id"
           placeholder="Transcoder Id"
           {...form.getInputProps("transcoderId")}
-        />
+        /> */}
         <Flex justify="flex-end">
           <Button p={"0 40px"} mt={16} onClick={createNewStream}>
             Add
@@ -139,7 +159,7 @@ function StreamDashboard() {
       <EuiFlexGrid columns={4} responsive>
         {cameraData.length > 0 &&
           cameraData.map((data) => (
-            <EuiFlexItem>
+            <EuiFlexItem key={data.id}>
               <StreamCard data={data} key={data.id} />
             </EuiFlexItem>
           ))}

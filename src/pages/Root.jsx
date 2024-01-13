@@ -73,7 +73,6 @@ const RootLayout = () => {
   const [active, setActive] = useState("");
 
   const pathName = window.location.pathname;
-  console.log(pathName);
   const items = data.map((item) => (
     <NavLink
       href="#required-for-focus"

@@ -7,7 +7,7 @@ import {
 } from "@elastic/eui";
 import PropTypes from "prop-types";
 
-function StreamCard({ data, onClick }) {
+function StreamCard({ data }) {
   function parseDateToSince() {
     return "Streaming for 3 days";
   }
