@@ -35,6 +35,7 @@ function StreamDashboard() {
     fetch("http://103.165.142.44:7880/api/cameras")
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setCameraData(data["cameras"]);
       });
   }, []);
@@ -50,7 +51,19 @@ function StreamDashboard() {
     },
   });
   const createNewStream = () => {
-    window.location.reload();
+    fetch("http://103.165.142.44:7880/api/cameras", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.getInputProps("name").value,
+        ip: form.getInputProps("ip").value,
+        port: form.getInputProps("port").value,
+        username: form.getInputProps("username").value,
+        password: form.getInputProps("password").value,
+        transcoderId: form.getInputProps("transcoderId").value,
+      }),
+    }).then(() => alert("You Have Created A New Stream"));
+    // window.location.reload();
   };
 
   // const baseUrl = "http://localhost:5173/streams";

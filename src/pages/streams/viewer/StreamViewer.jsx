@@ -5,8 +5,6 @@ import {
   EuiFlexGroup,
   EuiFlexItem,
   EuiHealth,
-  EuiImage,
-  EuiSkeletonText,
   EuiSpacer,
   EuiSplitPanel,
   EuiTab,
@@ -16,6 +14,8 @@ import {
 import { useTitle } from "ahooks";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Button, Flex, Switch } from "@mantine/core";
+
 import Header from "../../../components/header/Header";
 
 function StreamViewer() {
@@ -36,6 +36,8 @@ function StreamViewer() {
       href: "/streams",
     },
   ];
+
+  const [streamState, setStreamState] = useState(false);
 
   const [selectedTabId, setSelectedTabId] = useState(0);
 
@@ -101,14 +103,80 @@ function StreamViewer() {
       );
     });
   }
+  const streamingId = window.location.pathname.split("/").pop();
 
+  const switchHanlder = () => {
+    setStreamState(!streamState);
+
+    fetch(
+      `http://103.165.142.44:7880/api/cameras/${streamingId}/streams?enable=${!streamState}`,
+      {
+        method: "PUT",
+      }
+    );
+  };
+
+  const tiltedUp = () => {
+    fetch("http://103.165.142.44:7880/api/rc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cameraId: streamingId,
+        pan: 0,
+        tilt: 50,
+      }),
+    }).then(() => console.log("TILED"));
+  };
+  const tiltedRight = () => {
+    fetch("http://103.165.142.44:7880/api/rc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cameraId: streamingId,
+        pan: 50,
+        tilt: 0,
+      }),
+    }).then(() => console.log("TILED"));
+  };
+  const tiltedLeft = () => {
+    fetch("http://103.165.142.44:7880/api/rc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cameraId: streamingId,
+        pan: -50,
+        tilt: 0,
+      }),
+    }).then(() => console.log("TILED"));
+  };
+  const tiltedDown = () => {
+    fetch("http://103.165.142.44:7880/api/rc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cameraId: streamingId,
+        pan: 0,
+        tilt: -50,
+      }),
+    }).then(() => console.log("TILED"));
+  };
   return (
     <>
-      <Header
-        breadcrumps={breadcrumbs}
-        title="Living Room"
-        rightSideItems={[]}
-      ></Header>
+      <Flex justify="space-between" align="flex-end">
+        <Header
+          breadcrumps={breadcrumbs}
+          title="Living Room"
+          rightSideItems={[]}
+        ></Header>
+        <div>
+          <Switch
+            onClick={switchHanlder}
+            size="xl"
+            onLabel="OFF"
+            offLabel="Enable"
+          />
+        </div>
+      </Flex>
       <EuiSpacer size="m" />
       <section>
         <EuiFlexGroup direction="row">
@@ -118,9 +186,7 @@ function StreamViewer() {
               alt=""
             /> */}
             <iframe
-              src={`http://103.165.142.44:8889/${window.location.pathname
-                .split("/")
-                .pop()}`}
+              src={`http://103.165.142.44:8889/${streamingId}`}
               width={"100%"}
               height={500}
             ></iframe>
@@ -138,6 +204,12 @@ function StreamViewer() {
               style={{ height: "40rem" }}
             >
               <EuiSplitPanel.Inner grow className="">
+                <Flex>
+                  <Button onClick={tiltedUp}>Up</Button>
+                  <Button onClick={tiltedDown}>Down</Button>
+                  <Button onClick={tiltedLeft}>Left</Button>
+                  <Button onClick={tiltedRight}>Right</Button>
+                </Flex>
                 {/* <EuiSkeletonText lines={3} size="m" isLoading /> */}
               </EuiSplitPanel.Inner>
               <EuiSplitPanel.Inner grow={false} color="subdued">
