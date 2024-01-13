@@ -34,6 +34,10 @@ const data = [
         href: "/metrics",
         label: "Metrics",
       },
+      {
+        href: "/ltd",
+        label: "Transcoder",
+      },
     ],
   },
   {
@@ -96,7 +100,7 @@ const RootLayout = () => {
   ));
   return (
     <>
-      <EuiHeader theme="dark" position="fixed">
+      <EuiHeader theme="dark" style={{ zIndex: 0 }}>
         <EuiHeaderSectionItem>
           <EuiHeaderLogo iconType="/logo.png" iconTitle="ALSS">
             ALSS

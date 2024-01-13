@@ -3,10 +3,16 @@ import { useTitle } from "ahooks";
 import Header from "../../../components/header/Header";
 import StreamCard from "../../../components/stream_card/StreamCard";
 import Filter from "../../../components/filter_section/filter";
-import { Pagination } from "@mantine/core";
+import { Modal, Button, Flex, Pagination, TextInput } from "@mantine/core";
 
-import { useState } from "react";
+import { useForm } from "@mantine/form";
+
+import { useDisclosure } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import { IconPlus } from "@tabler/icons-react";
 function StreamDashboard() {
+  const [opened, { open, close }] = useDisclosure(false);
+
   const [activePage, setPage] = useState(1);
   useTitle("ALSS - Stream Dashboard", {
     restoreOnUnmount: true,
@@ -23,33 +29,107 @@ function StreamDashboard() {
     },
   ];
 
-  const streamData = {
-    id: "0001",
-    streamUrl: "https://streams.alss.tech",
-    info: {
-      location: "Warehouse A",
-      manufacturer: "HKVision",
+  const [cameraData, setCameraData] = useState([]);
+
+  useEffect(() => {
+    fetch("http://103.165.142.44:7880/api/cameras")
+      .then((res) => res.json())
+      .then((data) => {
+        setCameraData(data["cameras"]);
+      });
+  }, []);
+
+  const form = useForm({
+    initialValues: {
+      name: "",
+      ip: "",
+      port: "",
+      username: "",
+      password: "",
+      transcoderId: "",
     },
-    cameraId: "0001",
-    started: new Date().toISOString(),
-    protocol: "RTMP",
-    thumbnailUrl: "https://via.placeholder.com/1920x1080/eee?text=16:9",
-    ip: "192.168.10.200",
+  });
+  const createNewStream = () => {
+    window.location.reload();
   };
 
+  // const baseUrl = "http://localhost:5173/streams";
+  // const queryString = encodeURIComponent(JSON.stringify(streamData));
+
+  // console.log(queryString)
   return (
     <div>
-      <Header
-        breadcrumps={breadcrumbs}
-        title="Streams"
-        rightSideItems={[]}
-        description={"Discover all the current video streams"}
-      ></Header>
+      <Flex align={"center"} justify={"space-between"}>
+        <Header
+          breadcrumps={breadcrumbs}
+          title="Streams"
+          rightSideItems={[]}
+          description={"Discover all the current video streams"}
+        ></Header>
+        <Button
+          onClick={open}
+          leftSection={<IconPlus size={14} />}
+          variant="filled"
+        >
+          Add Stream/Camera
+        </Button>
+      </Flex>
       <Filter />
+      <Modal
+        opened={opened}
+        padding={"xl"}
+        onClose={close}
+        title="Add new Stream/Camera"
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+      >
+        <Flex justify="space-between">
+          <TextInput
+            label="Name"
+            placeholder="Name"
+            {...form.getInputProps("name")}
+          />
+          <TextInput
+            label="IP Address"
+            placeholder="IP Address"
+            {...form.getInputProps("ip")}
+          />
+        </Flex>
+        <TextInput
+          label="Port"
+          placeholder="Port"
+          {...form.getInputProps("port")}
+        />
+        <TextInput
+          label="User Name"
+          placeholder="User Name"
+          {...form.getInputProps("username")}
+        />
+        <TextInput
+          label="Password"
+          placeholder="Password"
+          {...form.getInputProps("password")}
+        />
+        <TextInput
+          label="Transcoder Id"
+          placeholder="Transcoder Id"
+          {...form.getInputProps("transcoderId")}
+        />
+        <Flex justify="flex-end">
+          <Button p={"0 40px"} mt={16} onClick={createNewStream}>
+            Add
+          </Button>
+        </Flex>
+      </Modal>
       <EuiFlexGrid columns={4} responsive>
-        <EuiFlexItem>
-          <StreamCard data={streamData} />
-        </EuiFlexItem>
+        {cameraData.length > 0 &&
+          cameraData.map((data) => (
+            <EuiFlexItem>
+              <StreamCard data={data} key={data.id} />
+            </EuiFlexItem>
+          ))}
       </EuiFlexGrid>
       <Pagination
         p={20}

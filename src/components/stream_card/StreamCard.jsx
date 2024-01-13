@@ -13,6 +13,7 @@ function StreamCard({ data, onClick }) {
   }
 
   function getBadgeColor() {
+    data.protocol = "SRT";
     switch (data.protocol) {
       case "SRT":
         return "primary";
@@ -27,14 +28,16 @@ function StreamCard({ data, onClick }) {
     <EuiCard
       display="transparent"
       textAlign="left"
-      href={"/streams/views/" + data.id}
-      image={<EuiImage src={data.thumbnailUrl}></EuiImage>}
+      href={"/streams/views/" + data.cameraId}
+      image={
+        <EuiImage src="https://via.placeholder.com/1920x1080/eee?text=16:9"></EuiImage>
+      }
       title={
         <div className="items-center inline-flex">
           <EuiText size="m" className="pr-2">
-            <strong>{data.info.location}</strong>
+            <strong>{data.name}</strong>
           </EuiText>
-          <EuiBadge color="#FBFBFB">{data.info.manufacturer}</EuiBadge>
+          <EuiBadge color="#FBFBFB">HIKVision</EuiBadge>
         </div>
       }
       titleSize="xs"
@@ -53,9 +56,9 @@ function StreamCard({ data, onClick }) {
           <EuiButtonEmpty
             color={"primary"}
             size="s"
-            onClick={() => {
-              onClick(data.id, data.streamUrl, data.cameraId);
-            }}
+            // onClick={() => {
+            //   onClick(data.id, data.streamUrl, data.cameraId);
+            // }}
           >
             View stream
           </EuiButtonEmpty>

@@ -113,10 +113,17 @@ function StreamViewer() {
       <section>
         <EuiFlexGroup direction="row">
           <EuiFlexItem grow={6}>
-            <EuiImage
+            {/* <EuiImage
               src="https://via.placeholder.com/1920x1080/eee?text=16:9"
               alt=""
-            />
+            /> */}
+            <iframe
+              src={`http://103.165.142.44:8889/${window.location.pathname
+                .split("/")
+                .pop()}`}
+              width={"100%"}
+              height={500}
+            ></iframe>
             <EuiSpacer size="l" />
             <EuiTabs>{renderTabs()}</EuiTabs>
             <EuiSpacer size="l" />
@@ -131,7 +138,7 @@ function StreamViewer() {
               style={{ height: "40rem" }}
             >
               <EuiSplitPanel.Inner grow className="">
-                <EuiSkeletonText lines={3} size="m" isLoading />
+                {/* <EuiSkeletonText lines={3} size="m" isLoading /> */}
               </EuiSplitPanel.Inner>
               <EuiSplitPanel.Inner grow={false} color="subdued">
                 <div className="flex items-center justify-between">

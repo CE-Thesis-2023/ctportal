@@ -12,6 +12,7 @@ import StreamDashboard from "./pages/streams/list/StreamDashboard.jsx";
 import StreamViewer from "./pages/streams/viewer/StreamViewer";
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
+import LtdDashBoard from "./pages/ltd/LtdDashBoard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/metrics",
         element: <StreamDashboard />,
+      },
+      {
+        path: "/ltd",
+        element: <LtdDashBoard />,
       },
       // {
       //     path: '/streams/cameras',
