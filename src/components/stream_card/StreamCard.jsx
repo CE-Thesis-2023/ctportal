@@ -29,7 +29,12 @@ function StreamCard({ data }) {
   const deleteHandler = (e) => {
     e.preventDefault();
 
-    console.log(e.target);
+    fetch(`http://103.165.142.44:7880/api/cameras?id=${e.currentTarget.id}`, {
+      method: "DELETE",
+    })
+      .then(() => console.log("Deleted"))
+      .catch((e) => console.log(e.message));
+    window.location.reload();
   };
 
   return (
@@ -48,11 +53,7 @@ function StreamCard({ data }) {
             </EuiText>
             <EuiBadge color="#FBFBFB">HIKVision</EuiBadge>
           </div>
-          <ActionIcon
-            bg={"white"}
-            onClick={deleteHandler}
-            value={data.cameraId}
-          >
+          <ActionIcon bg={"white"} onClick={deleteHandler} id={data.cameraId}>
             <IconTrash color="red" />
           </ActionIcon>
         </Flex>

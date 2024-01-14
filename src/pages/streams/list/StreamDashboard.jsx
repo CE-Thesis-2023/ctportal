@@ -10,7 +10,10 @@ import {
   Pagination,
   TextInput,
   Select,
+  NumberInput,
 } from "@mantine/core";
+
+import "./StreamDashboard.css";
 
 import { useForm } from "@mantine/form";
 
@@ -103,7 +106,7 @@ function StreamDashboard() {
         opened={opened}
         padding={"xl"}
         onClose={close}
-        title="Add new Stream/Camera"
+        title="Add New Stream/Camera"
         overlayProps={{
           backgroundOpacity: 0.55,
           blur: 3,
@@ -121,7 +124,7 @@ function StreamDashboard() {
             {...form.getInputProps("ip")}
           />
         </Flex>
-        <TextInput
+        <NumberInput
           label="Port"
           placeholder="Port"
           {...form.getInputProps("port")}

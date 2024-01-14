@@ -11,12 +11,13 @@ import PropTypes from "prop-types";
 export const CameraController = ({ streamingId }) => {
   const [streamState, setStreamState] = useState(false);
 
-  console.log(streamingId);
-
   useEffect(() => {
-    fetch(`http://103.165.142.44:7880/cameras/${streamingId}/streams`)
+    fetch(`http://103.165.142.44:7880/api/cameras/${streamingId}/streams`)
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        console.log(data.started);
+        setStreamState(data.started);
+      });
   }, []);
 
   const switchHanlder = () => {
@@ -29,48 +30,49 @@ export const CameraController = ({ streamingId }) => {
       }
     );
   };
-  const tiltingCamera = (e) => {
-    const cameraLocator = e.target.value;
 
-    let postCamera;
-
-    switch (cameraLocator) {
-      case "up":
-        postCamera = {
-          cameraId: streamingId,
-          pan: 0,
-          tilt: 50,
-        };
-        break;
-      case "down":
-        postCamera = {
-          cameraId: streamingId,
-          pan: 0,
-          tilt: -50,
-        };
-        break;
-      case "left":
-        postCamera = {
-          cameraId: streamingId,
-          pan: -50,
-          tilt: 0,
-        };
-        break;
-      case "right":
-        postCamera = {
-          cameraId: streamingId,
-          pan: 50,
-          tilt: 0,
-        };
-        break;
-      default:
-        break;
-    }
-
+  const tiltedUp = () => {
     fetch("http://103.165.142.44:7880/api/rc", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(postCamera),
+      body: JSON.stringify({
+        cameraId: streamingId,
+        pan: 0,
+        tilt: 50,
+      }),
+    }).then(() => console.log("TILED"));
+  };
+  const tiltedRight = () => {
+    fetch("http://103.165.142.44:7880/api/rc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cameraId: streamingId,
+        pan: 50,
+        tilt: 0,
+      }),
+    }).then(() => console.log("TILED"));
+  };
+  const tiltedLeft = () => {
+    fetch("http://103.165.142.44:7880/api/rc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cameraId: streamingId,
+        pan: -50,
+        tilt: 0,
+      }),
+    }).then(() => console.log("TILED"));
+  };
+  const tiltedDown = () => {
+    fetch("http://103.165.142.44:7880/api/rc", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cameraId: streamingId,
+        pan: 0,
+        tilt: -50,
+      }),
     }).then(() => console.log("TILED"));
   };
 
@@ -87,6 +89,7 @@ export const CameraController = ({ streamingId }) => {
         {/* TODO: Make new tabs*/}
         <EuiHeaderLinks>
           <Switch
+            checked={streamState}
             onClick={switchHanlder}
             size="xl"
             onLabel="On"
@@ -97,7 +100,7 @@ export const CameraController = ({ streamingId }) => {
       <EuiSplitPanel.Inner grow className="">
         <Center h={"100%"}>
           <Flex justify="center" align="center">
-            <Button p={"0 30px"} onClick={tiltingCamera} value={"left"}>
+            <Button p={"0 30px"} onClick={tiltedLeft} value={"left"}>
               Left
             </Button>
             <div
@@ -108,15 +111,15 @@ export const CameraController = ({ streamingId }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Button p={"10px 30px"} onClick={tiltingCamera} value={"up"}>
+              <Button p={"10px 30px"} onClick={tiltedUp} value={"up"}>
                 Up
               </Button>
               {/* <Button p={"20px 30px"} variant="outline"></Button> */}
-              <Button p={"10px 30px"} onClick={tiltingCamera} value={"down"}>
+              <Button p={"10px 30px"} onClick={tiltedDown} value={"down"}>
                 Down
               </Button>
             </div>
-            <Button p={"0 30px"} onClick={tiltingCamera} value={"right"}>
+            <Button p={"0 30px"} onClick={tiltedRight} value={"right"}>
               Right
             </Button>
           </Flex>
