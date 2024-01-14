@@ -2,9 +2,9 @@ version: "3.9"
 services:
   frontend:
     container_name: frontend
-    image: kenytt/ctportal
+    image: nguyentrantrung/ctportal:latest
     ports:
-      - 8005:80
+      - 8005:4173
     deploy:
       resources:
         limits:

@@ -1,18 +1,18 @@
 import { EuiProvider } from "@elastic/eui";
 import "@elastic/eui/dist/eui_theme_light.css";
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import RootLayout from "./pages/Root";
 import Dashboard from "./pages/dashboard/Dashboard.jsx";
 import ErrorPage from "./pages/errors/ErrorPage";
 import EventDashboard from "./pages/events/EventDashboard";
+import LtdDashBoard from "./pages/ltd/LtdDashBoard.jsx";
+import RootLayout from "./pages/Root";
 import StreamDashboard from "./pages/streams/list/StreamDashboard.jsx";
 import StreamViewer from "./pages/streams/viewer/StreamViewer";
-import "@mantine/core/styles.css";
-import { MantineProvider } from "@mantine/core";
-import LtdDashBoard from "./pages/ltd/LtdDashBoard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -40,10 +40,6 @@ const router = createBrowserRouter([
         path: "/ltd",
         element: <LtdDashBoard />,
       },
-      // {
-      //     path: '/streams/cameras',
-      //     element: <CameraDashboard/>,
-      // },
       {
         path: "/streams/views/:streamId",
         element: <StreamViewer />,
